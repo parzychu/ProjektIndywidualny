@@ -1,0 +1,23 @@
+<dom-module id="pi-error-card">
+    <link rel="import" href="../../bower_components/paper-card/paper-card.html">
+  <style>
+    :host {
+      display: block;
+    }
+
+    paper-card {
+        width: 100%;
+    }
+  </style>
+  <template>
+      <paper-card heading="[[status]]" class="nope">
+          <div class="card-content">
+              Data otrzymania: <span>[[date]]</span>
+          </div>
+          <div class="card-content">
+              <span>[[message]]</span>
+          </div>
+      </paper-card>
+  </template>
+  <script src="errorCard.js" charset="utf-8"></script>
+</dom-module>

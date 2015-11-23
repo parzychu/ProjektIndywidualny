@@ -17,26 +17,45 @@
     <link rel="stylesheet" href="./css/master.css" media="screen" title="no title" charset="utf-8">
 
     <!-- my imports -->
-    <link rel="import" href="modules/loadingTask.html">
+    <link rel="import" href="mycomponents/loadingTask/loadingTask.html">
 </head>
 
 <body class="fullbleed layout vertical">
 
+    <paper-dialog id="add-task-popup">
+        <h2>Link do pliku</h2>
+        <paper-input id='new-task-value' value="http://localhost:8000/Git/ProjektIndywidualny/task.html"></paper-input>
+        <div class="buttons">
+            <paper-button onclick="sendNewTask()" dialog-confirm>Wyślij</paper-button>
+            <paper-button dialog-dismiss>Anuluj</paper-button>
+        </div>
+    </paper-dialog>
+
     <paper-header-panel mode="standard">
         <paper-toolbar>
-            <paper-button><a href="http://localhost:8000/Git/ProjektIndywidualny/"> Aktywne</a></paper-button>
-            <paper-button><a href="http://localhost:8000/Git/ProjektIndywidualny/finished.html">Zakończone</a></paper-button>
-            <paper-button>Dodaj</paper-button>
+            <paper-button><a href="http://localhost:8000"> Aktywne</a></paper-button>
+            <paper-button><a href="http://localhost:8000/finished.html">Zakończone</a></paper-button>
+            <paper-button onclick=openAddTaskPopup()>Dodaj</paper-button>
             <div class="title">Aktywne Zadania</div>
             <paper-icon-button icon="search" on-tap="moreAction" style="right: 2%"></paper-icon-button>
             <paper-icon-button icon="more-vert" on-tap="moreAction"></paper-icon-button>
         </paper-toolbar>
 
         <div class="content">
+            <pi-loading-task created-by="creator" id="20" command="python: lol" progress-value="55" status="active" link="http://localhost:8000/Git/ProjektIndywidualny/task.html"></pi-loading-task>
         </div>
 
     </paper-header-panel>
 
 </body>
+<script>
+    function openAddTaskPopup() {
+        document.querySelector('#add-task-popup').open();
+    }
 
+    function sendNewTask() {
+        var value = document.querySelector('#new-task-value');
+        console.log(value);
+    }
+</script>
 </html>

@@ -1,0 +1,130 @@
+<dom-module id="pi-loading-task">
+
+    <link rel="import" href="../../bower_components/paper-card/paper-card.html">
+    <link rel="import" href="../../bower_components/paper-icon-button/paper-icon-button.html">
+    <link rel="import" href="../../bower_components/iron-icon/iron-icon.html">
+    <link rel="import" href="../../bower_components/iron-icons/iron-icons.html">
+    <link rel="import" href="../../bower_components/paper-dialog/paper-dialog.html">
+    <link rel="import" href="../../bower_components/paper-input/paper-input.html">
+    <link rel="import" href="../../bower_components/paper-dialog-scrollable/paper-dialog-scrollable.html">
+
+    <link rel="import" href="../errorCard/errorCard.html">
+    <template>
+        <style>
+            #loading-task {
+                height: 150px;
+                background-color: #9E9E9E;
+                color: white;
+                width: 60vw;
+                margin: 3vh 20vw 3vh 20vw;
+            }
+
+            :host {
+                --loading-progress: 0%;
+                position: relative;
+            }
+
+            #card-content {
+                background-color: transparent;
+                position: relative;
+                top: -150px;
+            }
+
+            .progress:after {
+                display: inline-block;
+                background-color: #448AFF;
+                opacity: .5;
+                height: 150px;
+                width: var(--loading-progress);
+                position: relative;
+            }
+
+            @-webkit-keyframes myprogress {
+                0% {
+                    width: 57%;
+                }
+                100% {
+                    width: 100%;
+                }
+            }
+
+            .progress {
+                display: inline-block;
+                background-color: #448AFF;
+                height: 150px;
+                -webkit-animation: myprogress 5s infinite linear;
+                position: relative;
+            }
+
+            paper-dialog-scrollable paper-card > div.card-content {
+                color: black;
+            }
+
+            paper-dialog {
+                width: 80vw;
+            }
+
+            #loading-task span.right {
+                right: 20px;
+                position: absolute;
+            }
+
+            #loading-task paper-icon-button {
+                top: 5px;
+                display: inline;
+                position: absolute;
+            }
+
+            #loading-task paper-icon-button.right {
+                right: 1%;
+            }
+        </style>
+
+        <paper-dialog id="link-popup">
+            <h2>Link do pliku</h2>
+            <paper-input value="http://localhost:8000/Git/ProjektIndywidualny/task.html"></paper-input>
+            <div class="buttons">
+                <paper-button dialog-confirm>Ok</paper-button>
+            </div>
+        </paper-dialog>
+
+        <paper-dialog id="error-popup">
+            <h2>Informacje z wyjścia</h2>
+            <paper-dialog-scrollable>
+                <pi-error-card date="01.09.1992" status="Error" message="no nieźle"></pi-error-card>
+                <pi-error-card date="01.09.1992" status="Error" message="no nieźle"></pi-error-card>
+                <pi-error-card date="01.09.1992" status="Error" message="no nieźle"></pi-error-card>
+                <pi-error-card date="01.09.1992" status="Error" message="no nieźle"></pi-error-card>
+                <pi-error-card date="01.09.1992" status="Error" message="no nieźle"></pi-error-card>
+            </paper-dialog-scrollable>
+            <div class="buttons">
+                <paper-button dialog-confirm>Zamknij</paper-button>
+            </div>
+        </paper-dialog>
+
+        <paper-card id='loading-task' elevation="2">
+            <div class='progress'>
+            </div>
+            <div id='card-content' class="card-content">
+
+                <paper-icon-button icon="feedback" style="display: block; right: 1%" onclick="openErrorPopup()"></paper-icon-button>
+                <paper-icon-button icon="link" ; style="display: block; right: 7%" onclick="openLinkPopup()"></paper-icon-button>
+
+                <p>Created by:
+                    <span>[[createdBy]]</span>
+                </p>
+                <p>Polecenie:
+                    <span>[[command]]</span>
+                </p>
+                <p>Przetwarzanie ID:
+                    <span>[[id]]</span>
+                </p>
+            </div>
+
+        </paper-card>
+        <iron-ajax auto url="http://gdata.youtube.com/feeds/api/videos/" params='{"alt":"json", "q":"chrome"}' handle-as="json" on-response="handleResponse" debounce-duration="300"></iron-ajax>
+
+    </template>
+    <script src="loadingTask.js" charset="utf-8"></script>
+    <script src="loadingTaskBehaviour.js"></script>
+</dom-module>
