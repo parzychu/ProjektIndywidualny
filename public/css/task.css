@@ -1,0 +1,73 @@
+body {
+  margin: 0;
+}
+
+a {
+    align-text: center;
+    text-decoration: none;
+    color: white;
+    height: 16px;
+}
+
+pi-error-card {
+    position:relative;
+    width: 60vw;
+    margin: 3vh 20vw 3vh 20vw
+}
+
+paper-toolbar {
+  --paper-toolbar-background: #388E3C;
+}
+
+span.center {
+  left: 40%;
+}
+
+paper-tab {
+  width: 20vw;
+}
+
+.darkgreen {
+  background-color: #388E3C;
+  color:white;
+}
+
+.amber {
+  background-color: #B6B6B6;
+  color:white;
+}
+
+.red {
+  background-color: #F44336;
+  color:white;
+}
+
+.green {
+  background-color:   #448AFF;
+  color:white;
+}
+
+paper-card span.right{
+  right: 20px;
+  position: absolute;
+}
+
+paper-card paper-icon-button {
+  top: 5px;
+  display: inline;
+  position: absolute;
+}
+
+paper-card paper-icon-button.right {
+  right: 1%;
+}
+
+paper-progress {
+  --paper-progress-active-color: #e91e63;
+  --paper-progress-height: 20px;
+  width: 80%;
+  display: inline;
+  position: absolute;
+  top: 22px;
+  left: 10%;
+}

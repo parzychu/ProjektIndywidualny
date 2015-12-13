@@ -7,10 +7,11 @@ Polymer({
      * @param {String} status Error status.
      * @param {String} date Date when error message was created.
      */
-    factoryImpl: function(message, status, date) {
+    factoryImpl: function(message, status, date, headerColor) {
         this.message = message;
         this.status = status;
         this.date = date;
+        this.headerColor = headerColor;
     },
 
     properties: {
@@ -20,12 +21,16 @@ Polymer({
         message: String,
         // Date when error message was created.
         // (tempolary type String)
-        date: String
+        date: String,
+        headercolor: String
     },
     created: function onCreated() {
         console.log('pi-error-card created');
     },
     attached: function() {
-        console.log('pi-error-card attached');
+        console.log(this.properties);
+        //this.customStyle['--pi-toolbar-color'] = this.headerColor;
+        console.log(this.headerColor);
+        this.updateStyles();
     }
 });
