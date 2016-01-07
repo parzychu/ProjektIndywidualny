@@ -6,9 +6,10 @@ var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 
 var routes = require('./routes/index');
-var users = require('./routes/users');
+var tasks = require('./routes/tasks');
 
 var app = express();
+var AppConfig = require('./config/appConfig');
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
@@ -22,8 +23,8 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
+app.use('/api/tasks', tasks);
 app.use('/', routes);
-app.use('/users', users);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
@@ -56,7 +57,7 @@ app.use(function(err, req, res, next) {
   });
 });
 
-var server = app.listen(3000, function () {
+var server = app.listen(AppConfig.PORT, function () {
   var host = server.address().address;
   var port = server.address().port;
 
