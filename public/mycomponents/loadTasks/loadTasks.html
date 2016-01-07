@@ -1,0 +1,75 @@
+<link rel="import" href="../loadingTask/loadingTask.html">
+<link rel="import" href="../../bower_components/iron-ajax/iron-ajax.html">
+
+<dom-module id="pi-load-tasks">
+  <template>
+    <style>
+      :host {
+        display: block;
+      }
+    </style>
+
+    <iron-ajax
+        auto
+        url="http://localhost:3000/api/tasks/list"
+        handle-as="json"
+        on-response="handleResponse"
+        last-response="{{ajaxResponse}}">
+    </iron-ajax>
+    <template is="dom-repeat" id="tasks" items="{{ajaxResponse.data}}">
+        <pi-loading-task
+            created-by="{{item.author}}"
+            id="{{item.id}}"
+            command="{{item.command}}"
+            progress-value="{{item.progress}}"
+            link="{{item.link}}"
+            status="{{item.status}}">
+        </pi-loading-task>
+    </template>
+  </template>
+  <script>
+    Polymer({
+      is: 'pi-load-tasks',
+      ready: function() {
+          this.tasks = [
+              {
+                  creator: "creator",
+                  id: "1",
+                  command: "python: lol1",
+                  progress: "55",
+                  status: "active",
+                  link: "http://localhost:8000/Git/ProjektIndywidualny/task.html"
+              },
+              {
+                  creator: "creator",
+                  id: "2",
+                  command: "python: lol1",
+                  progress: "55",
+                  status: "active",
+                  link: "http://localhost:8000/Git/ProjektIndywidualny/task.html"
+              },
+              {
+                  creator: "creator",
+                  id: "3",
+                  command: "python: lol1",
+                  progress: "55",
+                  status: "active",
+                  link: "http://localhost:8000/Git/ProjektIndywidualny/task.html"
+              },
+              {
+                  creator: "creator",
+                  id: "4",
+                  command: "python: lol1",
+                  progress: "55",
+                  status: "active",
+                  link: "http://localhost:8000/Git/ProjektIndywidualny/task.html"
+              }
+          ]
+      },
+      handleResponse: function handleResponse() {
+          console.log('Response got');
+          console.log(this.ajaxResponse.data)
+      }
+    });
+  </script>
+</dom-module>
