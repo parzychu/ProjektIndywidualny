@@ -18,10 +18,10 @@
             #loading-task {
                 /*height: 150px;*/
                 /*position:absolute;*/
-                background-color: #555555;
-                color: white;
+                /*background-color: #727272;*/
                 width: 60vw;
                 margin: 3vh 20vw 3vh 20vw;
+                /*text-shadow: 1px 1px 2px #212121;*/
             }
 
             :host {
@@ -30,6 +30,11 @@
 
             #card-content {
                 background-color: transparent;
+                display: flex;
+                justify-content: space-between;
+                flex-wrap: wrap;
+                flex-direction: row;
+                padding: 10px 60px 10px 10px;
             }
 
             @-webkit-keyframes myprogress {
@@ -73,12 +78,78 @@
                 bottom: 0px;
             }*/
 
-            .progress {
+            .header {
+                /*top: 0;*/
                 display: inline-block;
-                background-color: #448A00;
+                width: 100% !important;
+                /*position: absolute;*/
+                width: auto;
+            }
+
+            .progress {
+                margin-top: 2px;
+                /*display: inline-block;*/
+                height: 10px;
+            }
+
+            .secondary-progress {
+                margin-top: 2px;
+                height: 10px;
+                background-color: #929292;
+            }
+
+            .active {
+                background-color: #2196F3;
                 width: var(--loading-progress);
-                height: 100%;
-                position: absolute;
+            }
+
+            .paused {
+                background-color: #607D8B;
+                width: var(--loading-progress);
+            }
+
+            .finished {
+                background-color: #4CAF50;
+                width: 100%;
+            }
+
+            .error {
+                background-color: #D32F2F;
+                width: var(--loading-progress);
+            }
+
+            .deleted {
+                background-color: #212121;
+                -webkit-background-size: 100px 100px;
+                width: 100%;
+                background-image:
+                -webkit-linear-gradient(
+                45deg,
+                rgba(210, 47, 47, 1) 25%,
+                transparent 25%,
+                transparent 50%,
+                rgba(210, 47, 47, 1) 50%,
+                rgba(210, 47, 47, 1) 75%,
+                transparent 75%,
+                transparent
+                );
+            }
+
+            .submitted {
+                background-color: #212121;
+                -webkit-background-size: 50px 50px;
+                width: 100%;
+                background-image:
+                -webkit-linear-gradient(
+                45deg,
+                rgba(96, 125, 139, 1) 25%,
+                transparent 25%,
+                transparent 50%,
+                rgba(96, 125, 139, 1) 50%,
+                rgba(96, 125, 139, 1) 75%,
+                transparent 75%,
+                transparent
+                );
             }
 
             paper-dialog-scrollable paper-card > div.card-content {
@@ -95,18 +166,21 @@
             }
 
             #buttons-handler {
-                position: absolute;
+                color: white;
+                /*position: absolute;*/
                 right: 10px;
-                top: 10px;
+                /*top: 31%;*/
                 display: flex;
                 align-items: flex-end;
                 flex-direction: row;
-                justify-content: space-between;
+                justify-content: flex-end;
             }
 
             #buttons-handler paper-icon-button {
-                background-color: rgba(10, 10, 10, 0.1);
-                margin: 0 2px 0;
+                background-color: rgba(240, 240, 240, 0.1);
+                margin: 6px 2px 6px;
+                border-radius: 50%;
+                box-shadow: 0px 1px 2px #484848;
             }
         </style>
 
@@ -117,11 +191,19 @@
                 <paper-icon-button suffix onclick="{{goToLink()}}" icon="icons:forward">
                 </paper-input-button>
             </paper-input>
-
             <div class="buttons">
                 <paper-button dialog-confirm>Ok</paper-button>
             </div>
         </paper-dialog>
+
+        <paper-dialog id="confirmation-popup" modal role="alertdialog">
+          <h2>Alert</h2>
+          <p id="confirmation-popup-msg">msg</p>
+          <div class="buttons">
+            <paper-button dialog-confirm>Potwierdź</paper-button>
+            <paper-button dialog-dismiss autofocus>Anuluj</paper-button>
+          </div>
+      </paper-dialog>
 
         <paper-dialog id="details-popup">
             <h2>Informacje z wyjścia</h2>
@@ -141,27 +223,27 @@
         </paper-dialog>
 
         <paper-card id='loading-task' elevation="2">
-            <div class='progress'>
+            <div class='header'>
+                <div id="buttons-handler">
+                    <paper-icon-button on-click="restartTask" title="Restart task" icon="av:play-arrow"></paper-icon-button>
+                    <paper-icon-button on-click="pauseTask" title="Pause task" icon="av:pause" class="hidden"></paper-icon-button>
+                    <paper-icon-button on-click="openLinkPopup" title="Task link" icon="link"></paper-icon-button>
+                    <paper-icon-button on-click="openDetailsPopup" title="Task details" icon="feedback"></paper-icon-button>
+                    <paper-icon-button on-click="deleteTask" title="Delete task" icon="icons:delete"></paper-icon-button>
+                </div>
             </div>
-                <!-- <div class='primary-progress'></div> -->
-            <!-- <div class="progress"> -->
+            <div class='secondary-progress'>
+                <div class="progress">
+                </div>
             </div>
             <div id='card-content' class="card-content">
-                <div id="buttons-handler">
-                    <paper-icon-button id="start-btn" icon="av:play-arrow"></paper-icon-button>
-                    <paper-icon-button id="pause-btn" icon="av:pause" class="hidden"></paper-icon-button>
-                    <paper-icon-button id="link-btn" icon="link"></paper-icon-button>
-                    <paper-icon-button id="details-btn" icon="feedback"></paper-icon-button>
-                    <paper-icon-button id="delete-btn" icon="icons:delete"></paper-icon-button>
-                </div>
-                <p>Created by:
-                    <span>[[createdBy]]</span>
-                </p>
                 <p>Polecenie:
                     <span>[[command]]</span>
                 </p>
+                <p>Created by:
+                    <span>[[createdBy]]</span>
+                </p>
             </div>
-
         </paper-card>
 
     </template>
