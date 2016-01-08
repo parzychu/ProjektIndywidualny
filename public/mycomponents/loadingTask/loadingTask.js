@@ -1,40 +1,6 @@
 (function loadingTaskWrapper() {
     'use strict';
 
-    function rerunTask() {
-        console.log('TODO: rerun task');
-    }
-
-    function pauseTask() {
-        console.log('TODO: pause task');
-    }
-
-    function deleteTask() {
-        console.log('TODO: delete task');
-    }
-
-    function openLinkPopup() {
-        document.getElementById('link-popup').open();
-    }
-
-    function openDetailsPopup() {
-        document.getElementById('details-popup').open();
-    }
-
-    function bindEvents() {
-        var linkBtn = document.getElementById('link-btn'),
-            detailsBtn = document.getElementById('details-btn'),
-            startBtn = document.getElementById('start-btn'),
-            pauseBtn = document.getElementById('pause-btn'),
-            deleteBtn = document.getElementById('delete-btn');
-
-        linkBtn.addEventListener('click', openLinkPopup);
-        detailsBtn.addEventListener('click', openDetailsPopup);
-        startBtn.addEventListener('click', rerunTask);
-        pauseBtn.addEventListener('click', pauseTask);
-        deleteBtn.addEventListener('click', deleteTask);
-    }
-
     var LoadingTask = Polymer({
         is: 'pi-loading-task',
 
@@ -74,45 +40,85 @@
             command: String,
             link: String,
         },
-        changeColor: function changeColor(color) {
-            // body...
-        },
-        setColor: function setColor() {
-            var color = '';
 
-            switch (status) {
-                case 'active':
-                    color = '#448AFF';
-                    break;
-                case 'suspended':
-                    color = '#9E9E9E';
-                    break;
-                case 'done':
-                    color = '#4CAF50';
-                    break;
-                case 'abadoned':
-                    color = '#673AB7';
-                    break;
-                case 'error':
-                    color = '#D32F2F';
-                    break;
-            }
+        setClass: function setColor() {
+            var progress = this.$$('#loading-task .progress'),
+                header = this.$$('#loading-task .header'),
+                classes = ['active', 'paused', 'finished', 'error', 'deleted'];
+
+            progress.classList.remove(classes);
+            progress.classList.add(this.status);
+            header.classList.remove(classes);
+            header.classList.add(this.status);
+            header.setAttribute('title', this.status);
         },
+
         created: function onCreated() {
 
         },
+
         attached: function() {
-            bindEvents();
-            this.setColor();
+            this.setClass();
             this.customStyle['--loading-progress'] = this.progressValue + '%';
             this.updateStyles();
         },
-        // openLinkPopup: function openLinkPopup() {
-        //     this.$.linkPopup.open();
-        // },
-        // goToLink: function goToLink() {
-        //     console.log('goToLink');
-        // }
+
+        openLinkPopup: function openLinkPopup() {
+            this.$$('#link-popup').open();
+        },
+
+        openDetailsPopup: function openDetailsPopup() {
+            this.$$('#details-popup').open();
+        },
+
+        openConfirmationPopup: function openConfirmationPopup(msg, callback) {
+            var confirmationPopup = this.$$('#confirmation-popup'),
+                popupMsg = this.$$('#confirmation-popup-msg');
+
+            popupMsg.innerHTML = msg;
+            function confirmationPopupClosed() {
+                var confirmed = confirmationPopup.closingReason.confirmed;
+
+                if (confirmed) {
+                    callback();
+                }
+            }
+            confirmationPopup.addEventListener('iron-overlay-closed', confirmationPopupClosed);
+            confirmationPopup.open();
+        },
+
+        restartTask: function rerunTask(event) {
+            var msg = 'Czy na pewno chcesz wznowić zadanie?',
+                startBtn = this.$$('#buttons-handler .hidden');
+
+            function onPopupClosed() {
+                startBtn.classList.remove('hidden');
+                event.target.parentElement.classList.add('hidden');
+                console.log('TODO: restart task PUT {status: \'submitted\'}');
+            }
+            this.openConfirmationPopup(msg, onPopupClosed);
+        },
+
+        pauseTask: function pauseTask(event) {
+            var msg = 'Czy na pewno chcesz wstrzymać zadanie?',
+                startBtn = this.$$('#buttons-handler .hidden');
+
+            function onPopupClosed() {
+                startBtn.classList.remove('hidden');
+                event.target.parentElement.classList.add('hidden');
+                console.log('TODO: restart task PUT {status: \'paused\'}');
+            }
+            this.openConfirmationPopup(msg, onPopupClosed);
+        },
+
+        deleteTask: function deleteTask() {
+            var msg = 'Czy na pewno chcesz usunąć zadanie?';
+
+            function onPopupClosed() {
+                console.log('TODO: delete task DELETE {status: \'deleted\'}');
+            }
+            this.openConfirmationPopup(msg, onPopupClosed);
+        }
 
     });
     window.LoadingTask = LoadingTask;
