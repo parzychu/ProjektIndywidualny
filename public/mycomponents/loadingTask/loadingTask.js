@@ -105,12 +105,13 @@
 
         restartTask: function rerunTask(event) {
             var msg = 'Czy na pewno chcesz wznowić zadanie?',
-                startBtn = this.$$('#buttons-handler .hidden');
+                pauseBtn = this.$$('#pause-btn'),
+                startBtn =  this.$$('#start-btn');
 
             function onPopupClosed() {
-                startBtn.classList.remove('hidden');
+                pauseBtn.classList.remove('hidden');
                 // sometimes adding class doesn't work I guess it's polymer bug.
-                event.target.parentElement.classList.add('hidden');
+                startBtn.classList.add('hidden');
                 console.log('TODO: restart task PUT {status: \'submitted\'}');
             }
             this.openConfirmationPopup(msg, onPopupClosed);
@@ -118,11 +119,12 @@
 
         pauseTask: function pauseTask(event) {
             var msg = 'Czy na pewno chcesz wstrzymać zadanie?',
-                startBtn = this.$$('#buttons-handler .hidden');
+                pauseBtn = this.$$('#pause-btn'),
+                startBtn = this.$$('#start-btn');
 
             function onPopupClosed() {
                 startBtn.classList.remove('hidden');
-                event.target.parentElement.classList.add('hidden');
+                pauseBtn.classList.add('hidden');
                 console.log('TODO: restart task PUT {status: \'paused\'}');
             }
             this.openConfirmationPopup(msg, onPopupClosed);
