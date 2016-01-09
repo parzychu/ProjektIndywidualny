@@ -1,0 +1,90 @@
+<!-- pi-confirmation-popup is a popup based on Polymer paper-dialog.
+It's main role is to show alert with message to make certain that user wants to make
+selected action.
+
+Requires: -->
+<link rel="import" href="../../bower_components/polymer/polymer.html">
+<link rel="import" href="../../bower_components/paper-button/paper-button.html">
+<link rel="import" href="../../bower_components/paper-dialog/paper-dialog.html">
+
+pi-confirmation-popup
+
+Properties:
+    - msg {String} Msg which will be showed to user.
+    - closingReason {Object} Contains information why popup was closed last time.
+        closingReason = {
+            canceled: 'false',
+            confirmed: 'false'
+        }
+Fires:
+    - 'popup-closed' params: {closingReason};
+        closingReason = {
+            canceled: 'false',
+            confirmed: 'false'
+        }
+
+<dom-module id="pi-confirmation-popup">
+    <template>
+        <style>
+            :host {
+                display: block;
+            }
+        </style>
+
+        <paper-dialog modal role="alertdialog">
+            <h2>Alert</h2>
+            <p id="confirmation-popup-msg">msg</p>
+            <div class="buttons">
+                <paper-button dialog-confirm>Confirm</paper-button>
+                <paper-button dialog-dismiss autofocus>Cancel</paper-button>
+            </div>
+        </paper-dialog>
+    </template>
+    <script>
+        (function confirmationPopupWrapper() {
+            'use strict;'
+
+            window.ConfirmationPopup = Polymer({
+                is: 'pi-confirmation-popup',
+                properties: {
+                    msg: {
+                        type: String,
+                        observer: '_msgChanged'
+                    }
+                },
+
+                _msgChanged: function _msgChanged() {
+                    var msgElement = this.$$('#confirmation-popup-msg');
+
+                    msgElement.innerHTML = this.msg;
+                },
+
+                factoryImpl: function(msg) {
+                    this.msg = msg;
+                },
+
+                attached: function() {
+                    var confirmationPopup = this.$$('paper-dialog');
+
+                    function confirmationPopupClosed() {
+                        var closingReason = confirmationPopup.closingReason;
+
+                        this.closingReason = closingReason;
+                        this.fire('popup-closed', closingReason);
+                    }
+
+                    confirmationPopup.addEventListener('iron-overlay-closed', confirmationPopupClosed.bind(this));
+                },
+
+                detached: function() {
+                    confirmationPopup.removeEventListener('iron-overlay-closed');
+                },
+
+                open: function open() {
+                    this.$$('paper-dialog').open();
+                }
+
+            });
+        })();
+    </script>
+</dom-module>]

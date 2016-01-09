@@ -43,14 +43,30 @@
 
         setClass: function setColor() {
             var progress = this.$$('#loading-task .progress'),
+                secondaryProgress = this.$$('#loading-task .secondary-progress'),
                 header = this.$$('#loading-task .header'),
-                classes = ['active', 'paused', 'finished', 'error', 'deleted'];
+                classes = ['active', 'paused', 'finished', 'error', 'deleted', 'submitted'];
 
-            progress.classList.remove(classes);
-            progress.classList.add(this.status);
             header.classList.remove(classes);
             header.classList.add(this.status);
             header.setAttribute('title', this.status);
+            progress.classList.remove(classes);
+            switch (this.status) {
+                case 'active':
+                case 'paused':
+                case 'error': {
+                    progress.classList.add(this.status);
+                    break;
+                }
+                case 'finished':
+                case 'deleted':
+                case 'submitted':
+                    progress.classList.add('hidden');
+                    secondaryProgress.classList.add('hidden');
+                    break;
+                default:
+                    console.error('unsupported status: ' + this.status);
+            }
         },
 
         created: function onCreated() {
@@ -72,18 +88,17 @@
         },
 
         openConfirmationPopup: function openConfirmationPopup(msg, callback) {
-            var confirmationPopup = this.$$('#confirmation-popup'),
-                popupMsg = this.$$('#confirmation-popup-msg');
+            var confirmationPopup = document.querySelector('pi-confirmation-popup');
 
-            popupMsg.innerHTML = msg;
-            function confirmationPopupClosed() {
+            confirmationPopup.msg = msg;
+            function confirmationPopupClosed(event) {
                 var confirmed = confirmationPopup.closingReason.confirmed;
 
                 if (confirmed) {
                     callback();
                 }
             }
-            confirmationPopup.addEventListener('iron-overlay-closed', confirmationPopupClosed);
+            confirmationPopup.addEventListener('popup-closed', confirmationPopupClosed);
             confirmationPopup.open();
         },
 
