@@ -1,4 +1,5 @@
 <link rel="import" href="../loadingTask/loadingTask.html">
+<link rel="import" href="../confirmationPopup/confirmationPopup.html">
 <link rel="import" href="../../bower_components/iron-ajax/iron-ajax.html">
 
 <dom-module id="pi-load-tasks">
@@ -16,6 +17,7 @@
         on-response="handleResponse"
         last-response="{{ajaxResponse}}">
     </iron-ajax>
+    <pi-confirmation-popup></pi-confirmation-popup>
     <template is="dom-repeat" id="tasks" items="{{ajaxResponse.data}}">
         <pi-loading-task
             created-by="{{item.author}}"
