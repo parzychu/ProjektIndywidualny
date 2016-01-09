@@ -94,6 +94,7 @@
             function confirmationPopupClosed(event) {
                 var confirmed = confirmationPopup.closingReason.confirmed;
 
+                confirmationPopup.removeEventListener('popup-closed', confirmationPopupClosed);
                 if (confirmed) {
                     callback();
                 }
@@ -108,6 +109,7 @@
 
             function onPopupClosed() {
                 startBtn.classList.remove('hidden');
+                // sometimes adding class doesn't work I guess it's polymer bug.
                 event.target.parentElement.classList.add('hidden');
                 console.log('TODO: restart task PUT {status: \'submitted\'}');
             }

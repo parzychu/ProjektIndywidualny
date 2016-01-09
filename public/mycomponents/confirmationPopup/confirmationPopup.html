@@ -7,7 +7,7 @@ Requires: -->
 <link rel="import" href="../../bower_components/paper-button/paper-button.html">
 <link rel="import" href="../../bower_components/paper-dialog/paper-dialog.html">
 
-pi-confirmation-popup
+<!-- pi-confirmation-popup
 
 Properties:
     - msg {String} Msg which will be showed to user.
@@ -22,6 +22,7 @@ Fires:
             canceled: 'false',
             confirmed: 'false'
         }
+ -->
 
 <dom-module id="pi-confirmation-popup">
     <template>
@@ -40,51 +41,5 @@ Fires:
             </div>
         </paper-dialog>
     </template>
-    <script>
-        (function confirmationPopupWrapper() {
-            'use strict;'
-
-            window.ConfirmationPopup = Polymer({
-                is: 'pi-confirmation-popup',
-                properties: {
-                    msg: {
-                        type: String,
-                        observer: '_msgChanged'
-                    }
-                },
-
-                _msgChanged: function _msgChanged() {
-                    var msgElement = this.$$('#confirmation-popup-msg');
-
-                    msgElement.innerHTML = this.msg;
-                },
-
-                factoryImpl: function(msg) {
-                    this.msg = msg;
-                },
-
-                attached: function() {
-                    var confirmationPopup = this.$$('paper-dialog');
-
-                    function confirmationPopupClosed() {
-                        var closingReason = confirmationPopup.closingReason;
-
-                        this.closingReason = closingReason;
-                        this.fire('popup-closed', closingReason);
-                    }
-
-                    confirmationPopup.addEventListener('iron-overlay-closed', confirmationPopupClosed.bind(this));
-                },
-
-                detached: function() {
-                    confirmationPopup.removeEventListener('iron-overlay-closed');
-                },
-
-                open: function open() {
-                    this.$$('paper-dialog').open();
-                }
-
-            });
-        })();
-    </script>
+    <script src="confirmationPopup.js" charset="utf-8"></script>
 </dom-module>]
