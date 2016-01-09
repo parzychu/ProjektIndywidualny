@@ -1,8 +1,8 @@
-1. Install polymer elements:
+To run this project
+
+1. Go to project directory and install node modules:
+ 	$: cd (directory)/ProjektIndywidualny
+	$: npm install
+2. Istall polymer elements from project directory:
+	$: cd public
 	$: bower install
-2. Start server
-	$: python -m SimpleHTTPServer 8000
-	or
-	$: npm install -g polyserve
-	and then
-	$: polyserve -8000
