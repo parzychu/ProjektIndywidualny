@@ -12,6 +12,8 @@
 
         app = express(),
         server = null,
+        port = null,
+        DBController = require('./controllers/DBControler'),
         socketController = require('./controllers/socketController'),
         routes = require('./routes/index'),
         tasks = require('./routes/tasks'),
@@ -68,8 +70,9 @@
 
     server = app.listen(AppConfig.PORT, function() {
         var host = server.address().address;
-        var port = server.address().port;
+        port = server.address().port;
 
+        DBController.connect();
         io = require('socket.io')(server);
         socketController.init(io);
         console.log('Example app listening at http://%s:%s', host, port);

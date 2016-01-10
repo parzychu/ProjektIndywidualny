@@ -1,4 +1,7 @@
+/*global require, module */
 (function taskControllerWrapper() {
+    'use strict';
+
     var taskMock = require('./../mocks/taskMock'),
 
         /**
