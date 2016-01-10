@@ -8,13 +8,11 @@
         logger = require('morgan'),
         cookieParser = require('cookie-parser'),
         bodyParser = require('body-parser'),
+        io = null,
 
         app = express(),
         server = null,
-        socket = null,
-        host = null,
-        port = null,
-
+        socketController = require('./controllers/socketController'),
         routes = require('./routes/index'),
         tasks = require('./routes/tasks'),
         AppConfig = require('./config/appConfig');
@@ -34,11 +32,11 @@
     app.use(cookieParser());
     app.use(express.static(path.join(__dirname, 'public')));
 
-    app.use('/api/tasks', tasks);
+    app.use('/api', tasks);
     app.use('/', routes);
 
     // catch 404 and forward to error handler
-    app.use( function(req, res, next) {
+    app.use(function(req, res, next) {
         var err = new Error('Not Found');
         err.status = 404;
         next(err);
@@ -49,7 +47,7 @@
     // development error handler
     // will print stacktrace
     if (app.get('env') === 'development') {
-        app.use(function (err, req, res, next) {
+        app.use(function(err, req, res, next) {
             res.status(err.status || 500);
             res.render('error', {
                 message: err.message,
@@ -60,7 +58,7 @@
 
     // production error handler
     // no stacktraces leaked to user
-    app.use(function (err, req, res, next) {
+    app.use(function(err, req, res, next) {
         res.status(err.status || 500);
         res.render('error', {
             message: err.message,
@@ -68,14 +66,15 @@
         });
     });
 
-    server = app.listen(AppConfig.PORT, function () {
-        host = server.address().address;
-        port = server.address().port;
+    server = app.listen(AppConfig.PORT, function() {
+        var host = server.address().address;
+        var port = server.address().port;
 
         io = require('socket.io')(server);
-
+        socketController.init(io);
         console.log('Example app listening at http://%s:%s', host, port);
     });
+
 
     module.exports = app;
 })();

@@ -38,7 +38,7 @@
             <paper-icon-button icon="search" on-tap="moreAction" style="right: 2%"></paper-icon-button>
             <paper-icon-button icon="more-vert" on-tap="moreAction"></paper-icon-button>
         </paper-toolbar>
-    <pi-load-tasks></pi-load-tasks>
+        <pi-load-tasks></pi-load-tasks>
     </paper-header-panel>
 
 </body>
@@ -52,4 +52,7 @@
         console.log(value);
     }
 </script>
+<script src="/socket.io/socket.io.js"></script>
+<script src="/helpers/socketHelper.js"></script>
+
 </html>

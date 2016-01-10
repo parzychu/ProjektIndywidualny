@@ -18,7 +18,8 @@
     /**
      * Returns task list.
      */
-     router.get('task/:id/list', function(req, res, next) {
+     router.get('/tasks/list', function(req, res, next) {
+         console.log('llllllllllllllllllllllllllll');
          var response = {};
 
          response.data = taskController.getTaskList();

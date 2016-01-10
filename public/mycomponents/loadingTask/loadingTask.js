@@ -1,3 +1,4 @@
+/*global Polymer*/
 (function loadingTaskWrapper() {
     'use strict';
 
@@ -12,7 +13,7 @@
          * @param {number} progressValue Task progress.
          * @param {String} createdBy Name of user who created this task.
          */
-        factoryImpl: function(id, status, command, progressValue, createdBy, link) {
+        factoryImpl: function (id, status, command, progressValue, createdBy, link) {
             this.id = id;
             this.status = status;
             this.command = command;
@@ -22,23 +23,26 @@
         },
 
         properties: {
-            // Task id.
-            //id: Number,
             // Task status.
             status: {
                 type: String
-                    // observer: '_statusChanged'
             },
             // Task progress.
             progressValue: {
-                type: Number
-                    // observer: '_progressChanged'
+                type: Number,
+                observer: '_progressValueChanged'
             },
             // Name of user who created this task.
             createdBy: String,
             // Command used to run this task on server.
             command: String,
-            link: String,
+            link: String
+        },
+
+        _progressValueChanged: function _progressValueChanged() {
+            console.log(this.progressValue);
+            this.customStyle['--loading-progress'] = this.progressValue + '%';
+            this.updateStyles();
         },
 
         setClass: function setColor() {
@@ -52,20 +56,19 @@
             header.setAttribute('title', this.status);
             progress.classList.remove(classes);
             switch (this.status) {
-                case 'active':
-                case 'paused':
-                case 'error': {
-                    progress.classList.add(this.status);
-                    break;
-                }
-                case 'finished':
-                case 'deleted':
-                case 'submitted':
-                    progress.classList.add('hidden');
-                    secondaryProgress.classList.add('hidden');
-                    break;
-                default:
-                    console.error('unsupported status: ' + this.status);
+            case 'active':
+            case 'paused':
+            case 'error':
+                progress.classList.add(this.status);
+                break;
+            case 'finished':
+            case 'deleted':
+            case 'submitted':
+                progress.classList.add('hidden');
+                secondaryProgress.classList.add('hidden');
+                break;
+            default:
+                console.error('unsupported status: ' + this.status);
             }
         },
 
@@ -74,9 +77,18 @@
         },
 
         attached: function() {
+            var self = this;
+
             this.setClass();
-            this.customStyle['--loading-progress'] = this.progressValue + '%';
             this.updateStyles();
+
+            function onSocketMsg(data) {
+                if (data.progress) {
+                    self.progressValue = data.progress;
+                }
+            }
+
+            window.socketHelper.setListener(this.id, onSocketMsg);
         },
 
         openLinkPopup: function openLinkPopup() {
@@ -110,7 +122,6 @@
 
             function onPopupClosed() {
                 pauseBtn.classList.remove('hidden');
-                // sometimes adding class doesn't work I guess it's polymer bug.
                 startBtn.classList.add('hidden');
                 console.log('TODO: restart task PUT {status: \'submitted\'}');
             }
