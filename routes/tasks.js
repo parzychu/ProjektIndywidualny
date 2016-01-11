@@ -1,4 +1,6 @@
+/*global require, module*/
 (function taskRouterWrapper() {
+    'use strict';
 
     var express = require('express'),
         router = express.Router(),
@@ -7,43 +9,47 @@
     /**
      * Returns task details.
      */
-    router.get('/task/:id', function(req, res, next) {
-        var response = {};
+    router.get('/task/:id', function (req, res) {
+        var response = {},
+            taskId = req.params.id;
 
-        response.data = taskController.getDetails();
-        response.msg = 'Task details';
-        res.send(response);
+        function onGetDetails(data) {
+            response.data = data;
+            response.msg = 'Task details';
+            res.send(response);
+        }
+        taskController.getDetails(taskId, onGetDetails);
     });
 
     /**
      * Returns task list.
      */
-     router.get('/tasks/list', function(req, res, next) {
-         var response = {};
+    router.get('/tasks/list', function (req, res) {
+        var response = {};
 
-         function onGetTaskList(tasks) {
-             response.msg = 'Task details';
-             response.data = tasks;
-             res.send(response);
-         }
-         taskController.getTaskList(onGetTaskList);
-     });
+        function onGetTaskList(tasks) {
+            response.msg = 'Task details';
+            response.data = tasks;
+            res.send(response);
+        }
+        taskController.getTaskList(onGetTaskList);
+    });
 
-     /**
-      * Returns task details without history and logs.
-      */
-     router.get('/task/:id/lite', function(req, res, next) {
-         var response = {};
+    /**
+     * Returns task details without history and logs.
+     */
+    router.get('/task/:id/lite', function (req, res) {
+        var response = {};
 
-         response.data = taskController.getDetailsLite();
-         response.msg = 'Task details lite';
-         res.send(response);
-     });
+        response.data = taskController.getDetailsLite();
+        response.msg = 'Task details lite';
+        res.send(response);
+    });
 
     /**
      * Returns task logs.
      */
-    router.get('task/:id/logs', function(req, res, next) {
+    router.get('task/:id/logs', function (req, res) {
         var response = {};
 
         response.data = taskController.getLogs();
@@ -54,7 +60,7 @@
     /**
      * Returns task history.
      */
-    router.get('task/:id/history', function(req, res, next) {
+    router.get('task/:id/history', function (req, res) {
         var response = {};
 
         response.data = taskController.getHistory();

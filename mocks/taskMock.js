@@ -1,13 +1,11 @@
+/*global require, module*/
 (function taskMockWrapper() {
+    'use strict';
 
     var AppConfig = require('./../config/appConfig'),
-        DBController = require('./../controllers/DBControler');
+        url = AppConfig.URL + "/task.html",
+        taskMock = {},
 
-    /**
-     * Tasks mock.
-     * @type {Object}
-     */
-    var url = AppConfig.URL + "/task.html",
         tasks = [{
             author: "author",
             id: "1",
@@ -193,14 +191,9 @@
 
     /**
      * Returns task list.
-     * @param {Function} callback
      */
-    function getTaskList(callback) {
-        // TODO promisses
-        function onGetTasks(tasks) {
-            callback(tasks);
-        }
-        DBController.getTasks(onGetTasks);
+    function getTaskList() {
+        return tasks;
     }
 
 

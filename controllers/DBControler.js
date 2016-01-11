@@ -15,7 +15,7 @@
         connect: function connect() {
             var self = DBController;
 
-            MongoClient.connect(url, function(err, db) {
+            MongoClient.connect(url, function (err, db) {
                 console.log("Connected correctly to server.");
                 self.db = db;
             });
@@ -43,17 +43,31 @@
         getTasks: function getTasks(callback) {
             var self = DBController;
 
-            self.db.collection('tasks').find().toArray(function(notImportant, data) {
+            self.db.collection('tasks').find().toArray(function (notImportant, data) {
                 callback(data);
             });
         },
 
+        /**
+         * Obrains task with given id from DB.
+         * @param {Number} id
+         * @param {Function} callback
+         */
+        getTask: function getTask(taskId, callback) {
+            var self = DBController;
+
+            self.db.collection('tasks').find({'id': taskId}).toArray(function (notImportant, data) {
+                callback(data);
+            });
+        },
 
         /**
          * Disconnects mongodb.
          */
         disconnect: function disconnect() {
-            this.db.close();
+            var self = DBController;
+
+            self.db.close();
         }
     };
 
