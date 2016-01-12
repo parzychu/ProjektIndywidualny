@@ -9,12 +9,6 @@ a {
     height: 16px;
 }
 
-pi-error-card {
-    position:relative;
-    width: 60vw;
-    margin: 3vh 20vw 3vh 20vw
-}
-
 paper-toolbar {
   --paper-toolbar-background: #388E3C;
 }

@@ -8,24 +8,41 @@
 
         paper-card {
             width: 100%;
+            margin: 1% 0 1%;
         }
 
-        header {
-            color: var(--pi-header-color);
+        span.header {
+            font-size: 18px;
+            margin-top: 10px;
+        }
+
+        .card-header {
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .inline-block {
+            display: inline;
+        }
+
+        .error {
+            background-color: #F44336;
+            color: white;
+        }
+
+        .log {
+            background-color: #929292;
+            color: white;
         }
     </style>
     <template>
         <paper-card>
-            <div class="card-content header">
-                <h3>
-                    <span>[[status]]</span>
-                </h3>
-            </div>
-            <div class="card-content">
-                Data otrzymania:
+            <div class="card-content card-header">
+                <span class="header">[[status]]</span>
                 <span>[[date]]</span>
             </div>
             <div class="card-content">
+                > $:
                 <span>[[message]]</span>
             </div>
         </paper-card>
