@@ -1,9 +1,9 @@
 /*global Polymer */
-(function errorCardWrapper() {
+(function logCardWrapper() {
     'use strict';
 
-    Polymer({
-        is: 'pi-error-card',
+Polymer({
+        is: 'pi-log-card',
 
         /**
          * Custom constructor.
@@ -27,7 +27,7 @@
             date: String
         },
         created: function onCreated() {
-            console.log('pi-error-card created');
+            console.log('pi-log-card created');
         },
         attached: function onAttached() {
             if (this.status === 'error') {

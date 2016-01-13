@@ -1,0 +1,131 @@
+<link rel="import" href="../bower_components/polymer/polymer.html">
+<link rel="import" href="../bower_components/paper-header-panel/paper-header-panel.html">
+<link rel="import" href="../bower_components/paper-toolbar/paper-toolbar.html">
+<link rel="import" href="../bower_components/paper-progress/paper-progress.html">
+<link rel="import" href="../bower_components/paper-item/paper-item.html">
+<link rel="import" href="../bower_components/paper-card/paper-card.html">
+<link rel="import" href="../bower_components/paper-tabs/paper-tabs.html">
+<link rel="import" href="../bower_components/iron-pages/iron-pages.html">
+<link rel="import" href="../bower_components/iron-ajax/iron-ajax.html">
+
+<link rel="import" href="../mycomponents/logCard/logCard.html">
+<dom-module id="pi-task-view">
+    <template>
+        <style>
+            :host {
+                display: block;
+            }
+            .card-content {
+                padding: 0;
+            }
+
+            .card-content p {
+                padding: 0 16px;
+            }
+
+            .card-content :nth-child(2n):not(span) {
+                padding-bottom: 1em;
+                padding-top: 1em;
+                -webkit-margin-after: 0;
+                -webkit-margin-before: 0;
+                background-color: #e2e2e2;
+            }
+
+            paper-tabs {
+                width: 20em;
+                font-size: medium;
+            }
+
+            .top {
+                width: 100%;
+            }
+
+            .toolbar-text {
+                display: flex;
+                justify-content: space-around;
+                font-size: large;
+            }
+
+            paper-progress {
+                width: 80%;
+                top: 20px;
+                display: inline;
+            }
+
+            paper-tab a {
+                margin: 0 auto;
+            }
+        </style>
+        <paper-toolbar class="medium-tall">
+            <div class="top">
+                <div class='toolbar-text'>
+                    <span>Zadanie ID:<span>[[ajaxResponse.id]]</span></span>
+                    <span>Polecenie: <span>[[ajaxResponse.command]]</span></span>
+                </div>
+                <paper-progress value="[[ajaxResponse.progress]]"></paper-progress>
+            </div>
+
+                <paper-tabs class="bottom" selected="{{selectedPage}}">
+                    <paper-tab>Szczegóły</paper-tab>
+                    <paper-tab>Logi</paper-tab>
+                </paper-tabs>
+
+        </paper-toolbar>
+        <iron-ajax auto
+            url="http://localhost:3000/api/task/1"
+            handle-as="json"
+            on-response="handleResponse"
+            last-response="{{ajaxResponse}}">
+        </iron-ajax>
+        <div class="content">
+            <iron-pages attr-for-selected="data-route" selected="{{selectedPage}}">
+                <section data-route="0">
+                    <paper-card elevation="2" style="width: 100%">
+                        <div class="card-content">
+                            <p>ID: <span>[[ajaxResponse.id]]</span></p>
+                            <p>Autor: <span>[[ajaxResponse.author]]</span></p>
+                            <p>Status: <span>[[ajaxResponse.status]]</span></p>
+                            <p>Procent ukończenia: <span>[[ajaxResponse.progress]]</span></p>
+                            <p>Polecenie: <span>[[ajaxResponse.command]]</span></p>
+                            <p>Zadanie utworzono: <span>[[ajaxResponse.created]]</span></p>
+                            <p>Rozpoczęto przetwarzanie: <span>[[ajaxResponse.started]]</span></p>
+                            <p>Zakończono przetwarzanie: <span>[[ajaxResponse.finished]]</span></p>
+                        </div>
+                    </paper-card>
+                </section>
+
+                <section data-route="1">
+                        <div>
+                            <pi-log-card date="01.09.1992" status="log" message="no nieźle"></pi-log-card>
+                            <pi-log-card date="20.12.2020 godz. 22:22" status="error" message="no nieźle"></pi-log-card>
+                            <pi-log-card date="01.09.1992" status="error" message="no nieźle"></pi-log-card>
+                            <pi-log-card date="01.09.1992" status="error" message="no nieźle"></pi-log-card>
+                            <pi-log-card date="01.09.1992" status="log" message="no nieźle"></pi-log-card>
+                        </div>
+                </section>
+
+            </iron-pages>
+        </div>
+    </template>
+    <script>
+        Polymer({
+            is: 'pi-task-view',
+            handleResponse: function handleResponse() {
+                console.log('Response got');
+                console.log(this.ajaxResponse.data)
+            },
+            attached: function() {
+                var self = this;
+
+                this.selectedPage = 0;
+            },
+            handleResponse: function handleResponse() {
+                console.log('Response got');
+
+                console.log(this.ajaxResponse.data[0]);
+                this.ajaxResponse = this.ajaxResponse.data[0];
+            }
+
+        });
+    </script>
+</dom-module>
