@@ -40,7 +40,7 @@
         },
 
         _progressValueChanged: function _progressValueChanged() {
-            console.log(this.progressValue);
+
             this.customStyle['--loading-progress'] = this.progressValue + '%';
             this.updateStyles();
         },
@@ -148,6 +148,12 @@
                 console.log('TODO: delete task DELETE {status: \'deleted\'}');
             }
             this.openConfirmationPopup(msg, onPopupClosed);
+        },
+
+        goToLink: function goToLink() {
+            var taskId = this.id;
+
+            location.pathname = 'task.html';
         }
 
     });

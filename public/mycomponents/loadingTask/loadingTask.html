@@ -134,9 +134,9 @@
         <!-- move popups to seperate components   -->
         <paper-dialog id="link-popup">
             <h2>Link do pliku</h2>
-            <paper-input value="{{link}}">
+            <paper-input readonly value="{{link}}">
                 <div suffix> Go to link</div>
-                <paper-icon-button suffix onclick="{{goToLink()}}" icon="icons:forward">
+                <paper-icon-button suffix on-click="goToLink" icon="icons:forward">
                 </paper-input-button>
             </paper-input>
             <div class="buttons">
