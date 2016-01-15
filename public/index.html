@@ -22,9 +22,9 @@
 <body class="fullbleed layout vertical">
     <paper-dialog id="add-task-popup">
         <h2>Link do pliku</h2>
-        <paper-input id='new-task-value' value="http://localhost:8000/Git/ProjektIndywidualny/task.html"></paper-input>
+        <paper-input id='new-task-command' value="http://localhost:8000/Git/ProjektIndywidualny/task.html"></paper-input>
         <div class="buttons">
-            <paper-button onclick="sendNewTask()" dialog-confirm>Wyślij</paper-button>
+            <paper-button onclick="addTask()" dialog-confirm>Wyślij</paper-button>
             <paper-button dialog-dismiss>Anuluj</paper-button>
         </div>
     </paper-dialog>
@@ -50,6 +50,19 @@
     function sendNewTask() {
         var value = document.querySelector('#new-task-value');
         console.log(value);
+    }
+
+    function addTask() {
+        var command = document.querySelector('#new-task-command');
+            xhttp = new XMLHttpRequest();
+
+        xhttp.onreadystatechange = function() {
+            if (xhttp.readyState == 4 && xhttp.status == 200) {
+                alert(xhttp.responseText);
+            }
+        };
+        xhttp.open('POST', 'api/task', true);
+        xhttp.send('command='+command);
     }
 </script>
 <script src="/socket.io/socket.io.js"></script>

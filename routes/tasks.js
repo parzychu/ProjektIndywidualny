@@ -36,6 +36,21 @@
     });
 
     /**
+     * Adds new task request.
+     * @param {String} command
+     */
+    router.post('/task', function (req, res) {
+        var response = {};
+
+        function onTaskAdded(task) {
+            response.msg = 'New task created';
+            response.data = task;
+            res.send(response);
+        }
+        taskController.addTask(req.params.command, onTaskAdded);
+    });
+
+    /**
      * Returns task details without history and logs.
      */
     router.get('/task/:id/lite', function (req, res) {
