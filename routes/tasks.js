@@ -13,12 +13,32 @@
         var response = {},
             taskId = req.params.id;
 
-        function onGetDetails(data) {
-            response.data = data;
+        function onGetTask(task) {
+            response.data = task;
             response.msg = 'Task details';
             res.send(response);
         }
-        taskController.getDetails(taskId, onGetDetails);
+        taskController.getTask(taskId, onGetTask);
+    });
+
+    /**
+     * Changes task status.
+     * @param {Number} Id
+     * @param {String} Status
+     */
+    router.put('/task/:id', function (req, res) {
+        var response = {},
+            params = {
+                taskId: req.params.id,
+                status: req.params.status
+            };
+
+        function onGetTask(task) {
+            response.data = task;
+            response.msg = 'Task status changed';
+            res.send(response);
+        }
+        taskController.updateTaskStatus(params, onGetTask);
     });
 
     /**

@@ -11,8 +11,8 @@
          * @type {Object}
          */
         taskController = {
-            getDetails: DBController.getTask,
-            getTaskList: DBController.getTasks,
+            getTask: DBController.getTask,
+            getTaskList: DBController.getTaskList,
 
             /**
              * Adds new task.
@@ -24,6 +24,22 @@
                     DBController.insertTask(command, callback);
                 }
                 dataServerController.addTask(command, onTaskAdded);
+                console.log('Need second server: addTask');
+                // dataServerController.addTask(command, onTaskAdded);
+            },
+
+            /**
+             * Updates task.
+             * @param {Number} taskId
+             * @param {String} status New status.
+             * @param {Function} callback
+             */
+            updateTaskStatus: function updateTaskStatus(taskId, status, callback) {
+                function onTaskUpdated(updatedTask) {
+                    DBController.updateTaskStatus(updatedTask, callback);
+                }
+                console.log('Need second server: updateTask');
+                // dataServerController.updateTaskStatus(taskId, status, onTaskUpdated);
             },
             ////////// Methods considered ////////
             getDetailsLite: taskMock.getDetailsLite,

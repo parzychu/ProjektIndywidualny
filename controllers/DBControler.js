@@ -15,7 +15,7 @@
         connect: function connect() {
             var self = DBController;
 
-            MongoClient.connect(url, function (err, db) {
+            MongoClient.connect(url, function(err, db) {
                 console.log("Connected correctly to server.");
                 self.db = db;
             });
@@ -37,13 +37,34 @@
         },
 
         /**
+         * Updates task number.
+         * @param  {Object} updatedTask
+         * @param  {Function} callback
+         */
+        updateTaskStatus: function updateTaskStatus(updatedTask, callback) {
+            var self = DBController;
+
+            function onTaskUpdated(task) {
+                callback(task);
+            }
+
+            db.collection('restaurants').updateOne({
+                'id': updatedTask.taskId
+            }, {
+                $set: {
+                    "status": updatedTask.status
+                }
+            }, onTaskUpdated);
+        },
+
+        /**
          * Obtains task list and passes it to callback.
          * @param  {Function} callback
          */
-        getTasks: function getTasks(callback) {
+        getTaskList: function getTaskList(callback) {
             var self = DBController;
 
-            self.db.collection('tasks').find().toArray(function (notImportant, data) {
+            self.db.collection('tasks').find().toArray(function(notImportant, data) {
                 callback(data);
             });
         },
@@ -56,7 +77,9 @@
         getTask: function getTask(taskId, callback) {
             var self = DBController;
 
-            self.db.collection('tasks').find({'id': taskId}).toArray(function (notImportant, data) {
+            self.db.collection('tasks').find({
+                'id': taskId
+            }).toArray(function(notImportant, data) {
                 callback(data);
             });
         },

@@ -14,11 +14,26 @@
                 };
 
             function onTaskAdded(response) {
-                callback(response.newTask);
+                callback(response.data);
             }
-            console.log('Need second server');
             req = http.request(options, onTaskAdded);
             req.write(command);
+            req.end();
+        },
+
+        updateTaskStatus: function updateTaskStatus(taskId, status) {
+            var req = null,
+                options = {
+                    path: '/api/task/'+taskId,
+                    method: 'PUT'
+                };
+
+            function onTaskUpdated(response) {
+                callback(response.data);
+            }
+            console.log('Need second server: updateTask');
+            req = http.request(options, onTaskUpdated);
+            req.write(status);
             req.end();
         }
     };
