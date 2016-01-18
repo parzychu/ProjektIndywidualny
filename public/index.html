@@ -15,6 +15,9 @@
     <link rel="import" href="bower_components/iron-icons/av-icons.html">
     <link rel="stylesheet" href="./css/master.css" media="screen" title="no title" charset="utf-8">
 
+    <script src="/helpers/ajaxHelper.js"></script>
+    <script src="/socket.io/socket.io.js"></script>
+    <script src="/helpers/socketHelper.js"></script>
     <!-- my imports -->
     <link rel="import" href="mycomponents/loadTasks/loadTasks.html">
 </head>
@@ -31,9 +34,7 @@
 
     <paper-header-panel mode="standard">
         <paper-toolbar>
-            <paper-button><a href="http://localhost:8000"> Aktywne</a></paper-button>
-            <paper-button><a href="http://localhost:8000/finished.html">Zakończone</a></paper-button>
-            <paper-button onclick=openAddTaskPopup()>Dodaj</paper-button>
+            <paper-button onclick=openAddTaskPopup()>Dodaj zadanie</paper-button>
             <div class="title">Aktywne Zadania</div>
             <paper-icon-button icon="search" on-tap="moreAction" style="right: 2%"></paper-icon-button>
             <paper-icon-button icon="more-vert" on-tap="moreAction"></paper-icon-button>
@@ -44,7 +45,23 @@
 </body>
 <script>
     function openAddTaskPopup() {
-        document.querySelector('#add-task-popup').open();
+        var confirmationPopup = document.querySelector('#add-task-popup');
+
+        function onTaskAdded(task) {
+            console.log('task added');
+        }
+
+        function confirmationPopupClosed(event) {
+            var confirmed = confirmationPopup.closingReason.confirmed,
+                command =  document.querySelector('#new-task-command');
+
+            confirmationPopup.removeEventListener('popup-closed', confirmationPopupClosed);
+            if (confirmed) {
+                ajaxHelper.post('api/task', {command: command}, onTaskAdded);
+            }
+        }
+        confirmationPopup.addEventListener('popup-closed', confirmationPopupClosed);
+        confirmationPopup.open();
     }
 
     function sendNewTask() {
@@ -65,7 +82,5 @@
         xhttp.send('command='+command);
     }
 </script>
-<script src="/socket.io/socket.io.js"></script>
-<script src="/helpers/socketHelper.js"></script>
 
 </html>

@@ -44,15 +44,14 @@
         updateTaskStatus: function updateTaskStatus(updatedTask, callback) {
             var self = DBController;
 
-            function onTaskUpdated(task) {
-                callback(task);
+            function onTaskUpdated(err, task) {
+                callback(updatedTask);
             }
-
-            db.collection('restaurants').updateOne({
-                'id': updatedTask.taskId
+            self.db.collection('tasks').updateOne({
+                'id': updatedTask.id
             }, {
                 $set: {
-                    "status": updatedTask.status
+                    'status': updatedTask.status
                 }
             }, onTaskUpdated);
         },

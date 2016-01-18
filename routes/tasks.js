@@ -29,12 +29,12 @@
     router.put('/task/:id', function (req, res) {
         var response = {},
             params = {
-                taskId: req.params.id,
-                status: req.params.status
+                id: req.params.id,
+                status: req.body.status
             };
 
-        function onGetTask(task) {
-            response.data = task;
+        function onGetTask(taskStatus) {
+            response.data = taskStatus;
             response.msg = 'Task status changed';
             res.send(response);
         }
@@ -56,7 +56,7 @@
     });
 
     /**
-     * Adds new task request.
+     * Adds new task.
      * @param {String} command
      */
     router.post('/task', function (req, res) {

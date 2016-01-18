@@ -8,7 +8,6 @@
     <link rel="import" href="../../bower_components/paper-input/paper-input.html">
     <link rel="import" href="../../bower_components/paper-dialog-scrollable/paper-dialog-scrollable.html">
 
-    <link rel="import" href="../errorCard/errorCard.html">
     <template>
         <style>
             .hidden {
@@ -50,14 +49,30 @@
                 background-color: #929292;
             }
 
+            #start-btn {
+                display: none;
+            }
+
+            #pause-btn {
+                display: none;
+            }
+
             .active {
                 background-color: #2196F3;
                 width: var(--loading-progress);
             }
 
+            .active #pause-btn {
+                display: block;
+            }
+
             .paused {
                 background-color: #607D8B;
                 width: var(--loading-progress);
+            }
+
+            .paused #start-btn {
+                display: block;
             }
 
             .finished {
@@ -165,7 +180,7 @@
             <div class='header'>
                 <div id="buttons-handler">
                     <paper-icon-button id="start-btn" on-click="restartTask" title="Restart task" icon="av:play-arrow"></paper-icon-button>
-                    <paper-icon-button id="pause-btn" on-click="pauseTask" title="Pause task" icon="av:pause" class="hidden"></paper-icon-button>
+                    <paper-icon-button id="pause-btn" on-click="pauseTask" title="Pause task" icon="av:pause"></paper-icon-button>
                     <paper-icon-button on-click="openLinkPopup" title="Task link" icon="link"></paper-icon-button>
                     <paper-icon-button on-click="openDetailsPopup" title="Task details" icon="feedback"></paper-icon-button>
                     <paper-icon-button on-click="deleteTask" title="Delete task" icon="icons:delete"></paper-icon-button>

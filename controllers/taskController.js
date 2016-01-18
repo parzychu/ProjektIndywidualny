@@ -21,11 +21,16 @@
              */
             addTask: function addTask(command, callback) {
                 function onTaskAdded(newTask) {
-                    DBController.insertTask(command, callback);
+                    DBController.insertTask(newTask, callback);
                 }
-                dataServerController.addTask(command, onTaskAdded);
                 console.log('Need second server: addTask');
                 // dataServerController.addTask(command, onTaskAdded);
+                //
+                // under is just a mock
+                var newTask = taskMock.getDetails();
+                newTask.id = newTask.id + Math.floor((Math.random() * 100));
+                newTask.status = 'submitted';
+                DBController.insertTask(newTask, callback);
             },
 
             /**
@@ -34,12 +39,15 @@
              * @param {String} status New status.
              * @param {Function} callback
              */
-            updateTaskStatus: function updateTaskStatus(taskId, status, callback) {
+            updateTaskStatus: function updateTaskStatus(params, callback) {
                 function onTaskUpdated(updatedTask) {
                     DBController.updateTaskStatus(updatedTask, callback);
                 }
                 console.log('Need second server: updateTask');
                 // dataServerController.updateTaskStatus(taskId, status, onTaskUpdated);
+                //
+                // under is just a mock
+                DBController.updateTaskStatus({id: params.id, status: params.status}, callback);
             },
             ////////// Methods considered ////////
             getDetailsLite: taskMock.getDetailsLite,

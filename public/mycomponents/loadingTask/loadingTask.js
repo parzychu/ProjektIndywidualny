@@ -25,7 +25,8 @@
         properties: {
             // Task status.
             status: {
-                type: String
+                type: String,
+                observer: '_statusChanged'
             },
             // Task progress.
             progressValue: {
@@ -45,16 +46,24 @@
             this.updateStyles();
         },
 
+        _statusChanged: function _statusChanged() {
+            this.setClass();
+        },
+
         setClass: function setColor() {
             var progress = this.$$('#loading-task .progress'),
                 secondaryProgress = this.$$('#loading-task .secondary-progress'),
                 header = this.$$('#loading-task .header'),
-                classes = ['active', 'paused', 'finished', 'error', 'deleted', 'submitted'];
+                classes = ['active', 'paused', 'finished', 'error', 'deleted', 'submitted'],
+                i = 0,
+                classesLength = classes.length;
 
-            header.classList.remove(classes);
+            for (i; i < classesLength; i++) {
+                header.classList.remove(classes[i]);
+                progress.classList.remove(classes[i]);
+            }
             header.classList.add(this.status);
             header.setAttribute('title', this.status);
-            progress.classList.remove(classes);
             switch (this.status) {
             case 'active':
             case 'paused':
@@ -70,6 +79,7 @@
             default:
                 console.error('unsupported status: ' + this.status);
             }
+            this.updateStyles();
         },
 
         created: function onCreated() {
@@ -79,16 +89,15 @@
         attached: function() {
             var self = this;
 
-            this.setClass();
-            this.updateStyles();
+            self.setClass();
 
             function onSocketMsg(data) {
-                if (data.progress) {
+                if (data.id == self.id && data.progress) {
                     self.progressValue = data.progress;
                 }
             }
 
-            window.socketHelper.setListener(this.id, onSocketMsg);
+            window.socketHelper.setListener('updateProgress', onSocketMsg);
         },
 
         openLinkPopup: function openLinkPopup() {
@@ -117,28 +126,38 @@
 
         restartTask: function rerunTask(event) {
             var msg = 'Czy na pewno chcesz wznowić zadanie?',
-                pauseBtn = this.$$('#pause-btn'),
-                startBtn =  this.$$('#start-btn');
+                self = this,
+                pauseBtn = self.$$('#pause-btn'),
+                startBtn =  self.$$('#start-btn');
 
-            function onPopupClosed() {
+            function onStatusChanged(response) {
                 pauseBtn.classList.remove('hidden');
                 startBtn.classList.add('hidden');
-                console.log('TODO: restart task PUT {status: \'submitted\'}');
+                self.status = response.data.status;
             }
-            this.openConfirmationPopup(msg, onPopupClosed);
+
+            function onPopupClosed() {
+                ajaxHelper.put('api/task/'+self.id, {status: 'active'}, onStatusChanged);
+            }
+            self.openConfirmationPopup(msg, onPopupClosed);
         },
 
         pauseTask: function pauseTask(event) {
             var msg = 'Czy na pewno chcesz wstrzymać zadanie?',
-                pauseBtn = this.$$('#pause-btn'),
-                startBtn = this.$$('#start-btn');
+                self = this,
+                pauseBtn = self.$$('#pause-btn'),
+                startBtn = self.$$('#start-btn');
 
-            function onPopupClosed() {
+            function onStatusChanged(response) {
                 startBtn.classList.remove('hidden');
                 pauseBtn.classList.add('hidden');
-                console.log('TODO: restart task PUT {status: \'paused\'}');
+                self.status = response.data.status;
             }
-            this.openConfirmationPopup(msg, onPopupClosed);
+
+            function onPopupClosed() {
+                ajaxHelper.put('api/task/'+self.id, {status: 'paused'}, onStatusChanged);
+            }
+            self.openConfirmationPopup(msg, onPopupClosed);
         },
 
         deleteTask: function deleteTask() {
@@ -151,9 +170,7 @@
         },
 
         goToLink: function goToLink() {
-            var taskId = this.id;
-
-            location.pathname = 'task.html';
+           location.replace("http://localhost:3000/task.html?"+this.id);
         }
 
     });

@@ -53,7 +53,7 @@ Polymer({
                 newDate += addZero(date.getMinutes()) + ':';
                 newDate += addZero(date.getSeconds()) + ' ';
                 newDate += addZero(date.getDate()) + '.';
-                newDate += addZero(date.getMonth()) + '.';
+                newDate += addZero(date.getMonth() + 1) + '.';
                 newDate += date.getFullYear();
 
                 return newDate;

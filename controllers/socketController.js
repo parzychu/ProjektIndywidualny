@@ -8,6 +8,7 @@
         io: null,
         socket: null,
         sockets: [],
+        socketMock: null,
 
         /**
          * Emits message.
@@ -25,15 +26,18 @@
 
             self.socket = socket;
 
-            self.socket.emit('connected', 'connected to: '+ 'localhost ' + new Date());
+            self.socket.emit('connected', 'connected to: ' + 'localhost ' + new Date());
 
             var progress = 10;
-            setInterval(function() {
-                progress = (progress + 1) % 100;
-                self.sendMessage('1', {
-                    progress: progress
-                });
-            }, 1000);
+            if (self.socketMock === null) {
+                self.socketMock = setInterval(function() {
+                    progress = (progress + 1) % 100;
+                    self.sendMessage('updateProgress', {
+                        id: 1,
+                        progress: progress
+                    });
+                }, 2000);
+            }
         },
 
         /**
@@ -58,7 +62,6 @@
 
             newSocket.on('connection', onNewTaskConnection.bind(null, taskId));
         },
-
 
         /**
          * Inits module

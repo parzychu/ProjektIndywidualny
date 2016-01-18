@@ -72,7 +72,6 @@
 
         </paper-toolbar>
         <iron-ajax auto
-            url="http://localhost:3000/api/task/1"
             handle-as="json"
             on-response="handleResponse"
             last-response="{{ajaxResponse}}">
@@ -115,15 +114,25 @@
                 console.log(this.ajaxResponse.data)
             },
             attached: function() {
-                var self = this;
+                var self = this,
+                    taskId = location.search;
 
                 this.selectedPage = 0;
+                this.$$('iron-ajax').url = 'api/task/'+taskId.slice(1, taskId.length);
             },
-            handleResponse: function handleResponse() {
-                console.log('Response got');
 
-                console.log(this.ajaxResponse.data[0]);
-                this.ajaxResponse = this.ajaxResponse.data[0];
+            handleResponse: function handleResponse() {
+                var self = this;
+
+                console.log(self.ajaxResponse.data[0]);
+                self.ajaxResponse = self.ajaxResponse.data[0];
+
+                function onSocketMsg(data) {
+                    if (data.id == self.ajaxResponse.id && data.progress) {
+                        self.$$('paper-progress').value = data.progress;
+                    }
+                }
+                window.socketHelper.setListener('updateProgress', onSocketMsg);
             }
 
         });

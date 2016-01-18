@@ -41,11 +41,12 @@
 
             function onPostResponse() {
                 if (xhttp.readyState === 4 && xhttp.status === 200) {
-                    callback(xhttp.responseText);
+                    callback(JSON.parse(xhttp.responseText));
                 }
             }
             xhttp.onreadystatechange = onPostResponse;
             xhttp.open('POST', url, true);
+            xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
             xhttp.send(parsedParams);
         },
 
@@ -54,11 +55,12 @@
 
             function onPutResponse() {
                 if (xhttp.readyState === 4 && xhttp.status === 200) {
-                    callback(xhttp.responseText);
+                    callback(JSON.parse(xhttp.responseText));
                 }
             }
             xhttp.onreadystatechange = onPutResponse;
             xhttp.open('PUT', url, true);
+            xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
             xhttp.send(parsedParams);
         },
 
