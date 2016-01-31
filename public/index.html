@@ -27,15 +27,15 @@
         <h2>Link do pliku</h2>
         <paper-input id='new-task-command' value="http://localhost:8000/Git/ProjektIndywidualny/task.html"></paper-input>
         <div class="buttons">
-            <paper-button onclick="addTask()" dialog-confirm>Wyślij</paper-button>
-            <paper-button dialog-dismiss>Anuluj</paper-button>
+            <paper-button onclick="addTask()" dialog-confirm>Send</paper-button>
+            <paper-button dialog-dismiss>Cancel</paper-button>
         </div>
     </paper-dialog>
 
     <paper-header-panel mode="standard">
         <paper-toolbar>
-            <paper-button onclick=openAddTaskPopup()>Dodaj zadanie</paper-button>
-            <div class="title">Aktywne Zadania</div>
+            <paper-button onclick=openAddTaskPopup()>Add task</paper-button>
+            <div class="title">Tasks</div>
             <paper-icon-button icon="search" on-tap="moreAction" style="right: 2%"></paper-icon-button>
             <paper-icon-button icon="more-vert" on-tap="moreAction"></paper-icon-button>
         </paper-toolbar>
